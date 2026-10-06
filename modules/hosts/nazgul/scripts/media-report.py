@@ -11,6 +11,7 @@ Flags
   HD-audio   only TrueHD/DTS audio: audio transcode on most TVs (cheap)
   legacy     MPEG-4 part 2 / DivX / WMV etc.: CPU decode, old files
   HDR        informational: tone-mapped (GPU) for SDR screens
+  unreadable ffprobe found no video stream: damaged or incomplete file
 
 Shows are summarised per series; --all lists every file.
 """
@@ -28,7 +29,7 @@ TEXT_SUBS = {"subrip", "ass", "ssa", "mov_text", "webvtt", "text"}
 IMAGE_SUBS = {"hdmv_pgs_subtitle", "dvd_subtitle", "dvb_subtitle", "xsub"}
 HD_AUDIO = {"truehd", "dts", "mlp"}
 LEGACY = {"mpeg4", "msmpeg4v1", "msmpeg4v2", "msmpeg4v3", "wmv1", "wmv2", "wmv3", "h263", "rv40", "theora"}
-ORDER = ["AV1", "HEVC-RExt", "DV5", "PGS-only", "HD-audio", "legacy", "HDR"]
+ORDER = ["unreadable", "AV1", "HEVC-RExt", "DV5", "PGS-only", "HD-audio", "legacy", "HDR"]
 
 
 def probe(path):
@@ -115,7 +116,7 @@ def main():
             print(f"{series}: {summary}   (e.g. {desc})")
 
     print(f"\n# Totals ({len(files)} videos)")
-    for f in ORDER + ["unreadable"]:
+    for f in ORDER:
         if totals[f]:
             print(f"{f:<12} {totals[f]}")
 
