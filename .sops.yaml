@@ -1,0 +1,17 @@
+# Who can decrypt secrets/secrets.yaml. After changing this list run:
+#   sops updatekeys secrets/secrets.yaml
+keys:
+  # Your personal key for editing secrets (~/.config/sops/age/keys.txt)
+  - &admin age1smqkness70p2u7s9n3rt7ayh4zuxmt8ld09huxd04nt02w82md2qy4prqw
+  # Host keys: ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub
+  - &sihil age174azalgeyfn79zltzfwywh3cn00vlatulxfu4g0c025y6qsfc4tssspsu0
+  - &gothmog age1fp3rpdup9rrvqwafmt7kdnmyefp30hl389qqtsu30xutyfk0f54qm4ycfa
+  - &nazgul age1g0y3m68xvvdlkayqvf655gaq2znujne9qwnxftacrdpn5ctm4d9s0zpwdd
+creation_rules:
+  - path_regex: secrets/secrets\.yaml$
+    key_groups:
+      - age:
+          - *admin
+          - *sihil
+          - *gothmog
+          - *nazgul
