@@ -14,6 +14,20 @@ in
     # Listens on :8096; data in /var/lib/jellyfin, cache in /var/cache/jellyfin
     services.jellyfin.enable = true;
 
+    # `media-report`: lists movies and shows in formats this GPU or common
+    # players handle badly (AV1, Dolby Vision 5, image-only subtitles, ...)
+    environment.systemPackages = [
+      (pkgs.writers.writePython3Bin "media-report" {
+        flakeIgnore = [ "E501" ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          "${pkgs.jellyfin-ffmpeg}/bin"
+        ];
+      } (builtins.readFile ../scripts/media-report.py))
+    ];
+
     # Direct access for LAN devices that can't run Tailscale (the TV):
     # http://<nazgul's LAN IP>:8096, plus client auto-discovery. Everything
     # else reaches Jellyfin through the proxy (jelly.<domain>)
