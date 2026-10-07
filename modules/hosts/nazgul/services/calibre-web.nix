@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   users,
   ...
 }:
@@ -18,6 +19,11 @@ in
     # files, which belong to you.
     services.calibre-web = {
       enable = true;
+      # Kobo sync (Admin → Edit Basic Configuration → Feature Configuration)
+      # only shows up when its optional dependency is installed
+      package = pkgs.calibre-web.overridePythonAttrs (old: {
+        dependencies = old.dependencies ++ old.optional-dependencies.kobo;
+      });
       user = users.primary.userName;
       group = "users";
       listen = {
@@ -28,11 +34,14 @@ in
         calibreLibrary = "${cfg.media}/library/books";
         enableBookUploading = true;
         enableBookConversion = true;
+        # Kobo sync sends kepubs, which the stock Kobo reader handles best
+        enableKepubify = true;
       };
     };
 
-    # OPDS for the Kobo (KOReader), which isn't on Tailscale:
-    # http://<nazgul's LAN IP>:8083/opds
+    # The Kobo isn't on Tailscale, so it reaches Calibre-Web on the LAN:
+    # OPDS for KOReader at http://<nazgul's LAN IP>:8083/opds, Kobo sync at
+    # the api_endpoint from Calibre-Web's user settings
     networking.firewall.interfaces.${cfg.lanInterface}.allowedTCPPorts = [ port ];
   };
 }
