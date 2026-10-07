@@ -8,6 +8,8 @@
   #   documents/  documents, keys, saves, share (snapshotted)
   #   games/      game files, minecraft extras (snapshotted weekly)
   #   backups/    backups of other machines
+  #     ludusavi-backup/  game saves, one folder per person (own subvolume,
+  #                       snapshotted; shared as smb://nazgul/saves)
   #   .snapshots/ btrbk snapshots
   fileSystems."/srv/data" = {
     device = "/dev/disk/by-label/data";
@@ -44,6 +46,9 @@
           photos = { };
           documents = { };
           games.snapshot_preserve = "4w";
+          # Ludusavi keeps its own history; snapshots guard against a client
+          # deleting or overwriting the folder
+          "backups/ludusavi-backup".snapshot_preserve = "14d 8w";
         };
       };
     };

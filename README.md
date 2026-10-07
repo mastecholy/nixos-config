@@ -98,6 +98,7 @@ Keys the config expects:
 | `location` | Noctalia weather |
 | `ssh_hosts` | extra private `~/.ssh/config` entries (may be just a comment) |
 | `samba_password` | nazgul's SMB share, auto-mounted on workstations |
+| `samba_password_<name>` | SMB login for each person in `homelab.samba.saveUsers` (server) |
 | `wol_hosts` | `<host> <mac>` lines for `wake` |
 | `duckdns_token` | wildcard TLS certificate (server) |
 | `protonvpn_wireguard_key` | gluetun VPN for qBittorrent (server) |
@@ -158,6 +159,9 @@ Every service has a switch in `modules/hosts/nazgul/default.nix`
   (manga and comics, OPDS)
 - **Photos:** Immich (containers)
 - **Files:** File Browser, Samba (`smb://nazgul/data`)
+- **Game saves:** workstations back up daily with Ludusavi to the data share;
+  other people in `homelab.samba.saveUsers` use `smb://nazgul/saves`, which
+  only shows their own folder
 - **Downloads:** qBittorrent behind gluetun (ProtonVPN WireGuard with port
   forwarding)
 - **Access:** nginx at `<service>.<domain>` with one wildcard Let's Encrypt

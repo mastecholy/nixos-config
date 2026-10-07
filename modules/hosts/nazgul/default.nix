@@ -14,7 +14,10 @@
     filebrowser.enable = true;
     immich.enable = true;
     torrent.enable = true;
-    samba.enable = true;
+    samba = {
+      enable = true;
+      saveUsers = [ "alex" ];
+    };
     calibreWeb.enable = true;
     komga.enable = true;
   };
