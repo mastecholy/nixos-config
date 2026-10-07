@@ -9,10 +9,9 @@
         "root"
         "@wheel"
       ];
-    };
-    optimise = {
-      automatic = true;
-      dates = [ "09:00:00" ];
+      # Hardlink identical files as they're added to the store, instead of
+      # a scheduled optimise job
+      auto-optimise-store = true;
     };
   };
 }
