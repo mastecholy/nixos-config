@@ -34,10 +34,27 @@ in
         calibreLibrary = "${cfg.media}/library/books";
         enableBookUploading = true;
         enableBookConversion = true;
-        # Kobo sync sends kepubs, which the stock Kobo reader handles best
-        enableKepubify = true;
       };
     };
+
+    # Kobo sync sends kepubs, which the stock Kobo reader handles best.
+    # Calibre-Web only accepts a kepubify named like the upstream release
+    # (kepubify-linux-64bit), so enableKepubify's bin/kepubify is refused;
+    # point it at a folder with that name instead, after the module's own
+    # settings are written
+    systemd.services.calibre-web.serviceConfig.ExecStartPre =
+      let
+        kepubifyDir = pkgs.runCommand "kepubify-calibre-web" { } ''
+          mkdir $out
+          ln -s ${lib.getExe pkgs.kepubify} $out/kepubify-linux-64bit
+        '';
+      in
+      lib.mkAfter [
+        (pkgs.writeShellScript "calibre-web-kepubify" ''
+          ${lib.getExe pkgs.sqlite} /var/lib/calibre-web/app.db \
+            "update settings set config_kepubifypath = '${kepubifyDir}'"
+        '')
+      ];
 
     # The Kobo isn't on Tailscale, so it reaches Calibre-Web on the LAN:
     # OPDS for KOReader at http://<nazgul's LAN IP>:8083/opds, Kobo sync at
