@@ -48,6 +48,9 @@
   environment.systemPackages = with pkgs; [
     discord
     ytmdesktop
+    # Jellyfin client that plays files itself (mpv), so HEVC/HDR films
+    # direct-play instead of nazgul transcoding them as for the browser
+    jellyfin-desktop
     # Inspect input devices: sudo evtest
     evtest
     # Editing secrets/secrets.yaml and adding host keys

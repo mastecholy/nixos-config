@@ -36,10 +36,16 @@ in
       allowedUDPPorts = [ 7359 ];
     };
 
-    # Hardware transcoding on the i5-8500's UHD 630 (VA-API)
+    # Hardware transcoding on the i5-8500's UHD 630: pick VA-API in
+    # Jellyfin (QuickSync on this generation needs the deprecated Intel Media
+    # SDK). OpenCL runs Jellyfin's HDR-to-SDR tone mapping on the GPU;
+    # the legacy runtime is the last one that supports 8th-gen Intel GPUs
     hardware.graphics = {
       enable = true;
-      extraPackages = [ pkgs.intel-media-driver ];
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-compute-runtime-legacy1
+      ];
     };
     users.users.jellyfin.extraGroups = [
       "render"
