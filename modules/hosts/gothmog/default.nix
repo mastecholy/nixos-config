@@ -25,4 +25,20 @@
   networking.interfaces.eno1.wakeOnLan.enable = true;
   # NetworkManager manages eno1 and would otherwise apply its own default
   networking.networkmanager.settings.connection."ethernet.wake-on-lan" = "magic";
+
+  # Cap eno1 (Realtek 2.5G, r8169) at 1 Gbit/s: at 2.5G the link keeps
+  # dropping on this network. Only the first .link file that matches a NIC
+  # applies, so this one also carries what it would otherwise shadow:
+  # systemd's default naming (99-default.link) and Wake-on-LAN. Matched by
+  # PCI slot (see hardware_report.json). Remove to go back to 2.5G.
+  systemd.network.links."10-eno1" = {
+    matchConfig.Path = "pci-0000:0a:00.0";
+    linkConfig = {
+      NamePolicy = "keep kernel database onboard slot path";
+      AlternativeNamesPolicy = "database onboard slot path";
+      MACAddressPolicy = "persistent";
+      WakeOnLan = "magic";
+      Advertise = "10baset-full 100baset-full 1000baset-full";
+    };
+  };
 }
