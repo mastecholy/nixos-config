@@ -6,7 +6,11 @@ let
   subdomains = {
     jelly.port = 8096;
     audiobooks.port = 13378;
-    files.port = 8888;
+    files = {
+      port = 8888;
+      # Uploads arrive in 10 MB chunks, over nginx's 1 MB default
+      extraConfig = "client_max_body_size 0;";
+    };
     qbit.port = 8085;
     books = {
       port = 8083;
