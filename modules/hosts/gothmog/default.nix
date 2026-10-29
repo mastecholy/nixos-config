@@ -32,20 +32,20 @@
   # stick; NetworkManager applies this on every connect instead (with
   # auto-negotiation on, speed + duplex advertise only that one mode).
   # Remove to go back to 2.5G.
-  networking.networkmanager.ensureProfiles.profiles.eno1 = {
-    connection = {
-      id = "eno1";
-      type = "ethernet";
-      interface-name = "eno1";
-      # Preferred over NetworkManager's automatic "Wired connection 1"
-      autoconnect-priority = 10;
-    };
-    ethernet = {
-      auto-negotiate = true;
-      speed = 1000;
-      duplex = "full";
-    };
-    ipv4.method = "auto";
-    ipv6.method = "auto";
-  };
+  # networking.networkmanager.ensureProfiles.profiles.eno1 = {
+  #   connection = {
+  #     id = "eno1";
+  #     type = "ethernet";
+  #     interface-name = "eno1";
+  #     # Preferred over NetworkManager's automatic "Wired connection 1"
+  #     autoconnect-priority = 10;
+  #   };
+  #   ethernet = {
+  #     auto-negotiate = true;
+  #     speed = 1000;
+  #     duplex = "full";
+  #   };
+  #   ipv4.method = "auto";
+  #   ipv6.method = "auto";
+  # };
 }
