@@ -53,6 +53,8 @@
     jellyfin-desktop
     # Inspect input devices: sudo evtest
     evtest
+    # Network card settings and link status: ethtool eno1
+    ethtool
     # Editing secrets/secrets.yaml and adding host keys
     sops
     age
