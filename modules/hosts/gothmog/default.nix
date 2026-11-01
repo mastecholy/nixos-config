@@ -26,12 +26,10 @@
   # NetworkManager manages eno1 and would otherwise apply its own default
   networking.networkmanager.settings.connection."ethernet.wake-on-lan" = "magic";
 
-  # Cap eno1 (Realtek 2.5G, r8169) at 1 Gbit/s: at 2.5G the link keeps
-  # dropping on this network. r8169 resets the advertised speeds whenever
-  # the interface comes up, so a .link file or ethtool at boot doesn't
-  # stick; NetworkManager applies this on every connect instead (with
-  # auto-negotiation on, speed + duplex advertise only that one mode).
-  # Remove to go back to 2.5G.
+  # eno1 (Realtek RTL8125D, r8169) drops its link every 30-90 minutes on
+  # this network while Energy-Efficient Ethernet is on (and flaps at 2.5G).
+  # NetworkManager turns EEE off on every connect; a .link file or ethtool
+  # at boot would be undone when the driver brings the card up.
   networking.networkmanager.ensureProfiles.profiles.eno1 = {
     connection = {
       id = "eno1";
@@ -40,11 +38,7 @@
       # Preferred over NetworkManager's automatic "Wired connection 1"
       autoconnect-priority = 10;
     };
-    ethernet = {
-      auto-negotiate = true;
-      speed = 1000;
-      duplex = "full";
-    };
+    ethtool.eee-enabled = false;
     ipv4.method = "auto";
     ipv6.method = "auto";
   };
