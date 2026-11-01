@@ -15,8 +15,8 @@ in
     };
 
   # Runs Windows games and launchers (Battle.net, EA, Epic, ...) with Proton
-  # through umu-launcher, one prefix per game. Being tried as a simpler
-  # replacement for Lutris (battlenet.nix)
+  # through umu-launcher, one Wine prefix per entry under ~/Faugus. Downloads
+  # its own Proton builds and has a winetricks button, so no system Wine
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.faugus-launcher ];
   };

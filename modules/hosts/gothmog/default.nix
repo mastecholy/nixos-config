@@ -17,7 +17,7 @@
   # takes effect after a reboot
   hardware.amdgpu.overdrive.enable = true;
 
-  # Battle.net and other extras (modules/features/workstation/modules/gaming-extra)
+  # Faugus Launcher (Battle.net) and other extras (modules/features/workstation/modules/gaming-extra)
   gaming.extra.enable = true;
 
   # Wake on LAN (`wake gothmog` from any host). Also needs "Wake on LAN" /

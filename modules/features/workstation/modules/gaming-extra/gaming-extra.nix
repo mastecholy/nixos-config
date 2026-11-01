@@ -9,9 +9,9 @@ let
 in
 {
   # Niche gaming setup, enabled per host (modules/hosts/<name>/default.nix).
-  # Each area lives in its own file here (battlenet.nix, later fightcade,
+  # Each area lives in its own file here (faugus.nix, later fightcade,
   # emulators...) with its own switch that defaults to gaming.extra.enable
-  options.gaming.extra.enable = lib.mkEnableOption "extra gaming tools (Battle.net, emulators, ...)";
+  options.gaming.extra.enable = lib.mkEnableOption "extra gaming tools (Faugus Launcher, emulators, ...)";
 
   config = lib.mkIf cfg.enable {
     # GE-Proton as a selectable compatibility tool in Steam (Properties →

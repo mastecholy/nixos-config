@@ -18,9 +18,10 @@ in
           store = "steam";
           path = "~/.local/share/Steam";
         }
+        # Faugus Launcher's Wine prefixes, one per game or launcher
         {
-          store = "lutris";
-          path = "~/.local/share/lutris";
+          store = "otherWine";
+          path = "~/Faugus/*";
         }
       ];
       backup = {
