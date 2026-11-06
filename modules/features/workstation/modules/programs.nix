@@ -45,6 +45,14 @@
 
   };
 
+  # AppImages (e.g. CurseForge for WoW addons) run with appimage-run, which
+  # provides the libraries they expect. binfmt lets them start directly:
+  # chmod +x the file, then run or double-click it
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
   environment.systemPackages = with pkgs; [
     discord
     ytmdesktop
