@@ -33,9 +33,9 @@ in
   # ~/.local/state/noctalia/settings.toml and layered on top of this file;
   # delete that file to fall back to exactly what's declared here.
   #
-  # Colors, dark/light mode and popup opacity come from stylix
-  # (stylix.targets.noctalia), so Noctalia's own hyprland/kitty/qt templates
-  # are left off to avoid fighting stylix over those files.
+  # Colors come from the wallpaper and are passed on to other apps through
+  # Noctalia's templates: ./theme.nix. Dark/light mode, popup opacity and
+  # the font still come from stylix (stylix.targets.noctalia).
   programs.noctalia = {
     enable = true;
     settings = {
@@ -154,8 +154,6 @@ in
           }
         ];
       };
-
-      theme.templates.community_ids = [ "discord" ];
 
       wallpaper = {
         directory = wallpapers;

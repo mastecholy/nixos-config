@@ -9,8 +9,10 @@ with shared users, theming, secrets and tooling.
 | `gothmog` | workstation | Desktop: Ryzen 9800X3D, AMD GPU, two monitors    |
 | `nazgul`  | server      | Home server: NVMe system disk, 2× 8 TB btrfs RAID1 |
 
-**Highlights:** Hyprland + [Noctalia](https://noctalia.dev) shell, system-wide
-theming with [Stylix](https://github.com/nix-community/stylix), LazyVim,
+**Highlights:** Hyprland + [Noctalia](https://noctalia.dev) shell, desktop
+colors that follow the wallpaper (Noctalia) on top of
+[Stylix](https://github.com/nix-community/stylix) fonts and a static scheme,
+LazyVim,
 fish/starship, secrets with [sops-nix](https://github.com/Mic92/sops-nix),
 disk layout with [disko](https://github.com/nix-community/disko), hardware
 detection with [nixos-facter](https://github.com/nix-community/nixos-facter),
@@ -193,9 +195,10 @@ To add a service: create `services/<name>.nix` with a
    - `homelab.domain` and `homelab.lanInterface`
      (`modules/hosts/nazgul/services/default.nix`) and the LAN subnet in
      `torrent.nix`
-4. **Taste:** colors in `modules/common/nixos-core/modules/stylix.nix`,
-   keybinds in `modules/features/home-manager/dotfiles/hypr/`, the bar in
-   `noctalia.nix`.
+4. **Taste:** the static scheme and accent colors in
+   `modules/common/nixos-core/modules/stylix.nix`, wallpaper-driven colors in
+   `modules/features/home-manager/modules/desktop/theme.nix`, keybinds in
+   `modules/features/home-manager/dotfiles/hypr/`, the bar in `noctalia.nix`.
 5. **Install** each machine as in [Adding a machine](#adding-a-machine).
 
 Workstation-only niceties (`gaming.extra.enable`, LACT, the Samba

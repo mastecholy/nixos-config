@@ -55,17 +55,48 @@ in
       vim.opt.numberwidth = 2
     '';
 
-    # Colorscheme generated from the stylix base16 palette, so neovim follows
-    # whatever scheme stylix is set to
+    # Colorscheme from a base16 palette. On the workstations Noctalia
+    # renders one from the wallpaper (desktop/theme.nix) and neovim re-applies
+    # it whenever that file changes; without it (the server, or before the
+    # first render) the stylix scheme is used
     plugins.colorscheme = ''
+      local static = { ${palette} }
+      local dir = (os.getenv("XDG_CACHE_HOME") or (os.getenv("HOME") .. "/.cache")) .. "/noctalia-theme"
+      local name = "base16.lua"
+
+      local function apply(startup)
+        local ok, dynamic = pcall(dofile, dir .. "/" .. name)
+        if not (ok and type(dynamic) == "table") then
+          -- Missing or half-written file: keep what's shown, unless nothing is yet
+          if not startup then return end
+          dynamic = static
+        end
+        require("mini.base16").setup({ palette = dynamic })
+        vim.g.colors_name = "stylix"
+        if not startup then
+          -- Let statusline and other plugins rebuild their colors
+          vim.api.nvim_exec_autocmds("ColorScheme", { pattern = "stylix" })
+        end
+      end
+
       return {
         { dir = "${pkgs.vimPlugins.mini-base16}", name = "mini.base16", lazy = false, priority = 1000 },
         {
           "LazyVim/LazyVim",
           opts = {
             colorscheme = function()
-              require("mini.base16").setup({ palette = { ${palette} } })
-              vim.g.colors_name = "stylix"
+              apply(true)
+              if vim.uv.fs_stat(dir) then
+                local timer = assert(vim.uv.new_timer())
+                local watcher = assert(vim.uv.new_fs_event())
+                watcher:start(dir, {}, function(_, changed)
+                  if changed == name then
+                    -- A write shows up as several events; wait for it to settle
+                    timer:stop()
+                    timer:start(150, 0, vim.schedule_wrap(function() apply(false) end))
+                  end
+                end)
+              end
             end,
           },
         },

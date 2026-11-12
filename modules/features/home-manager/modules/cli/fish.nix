@@ -31,7 +31,10 @@
     '';
   };
 
-  # Prompt; colors come from stylix's base16 palette
+  # See modules/common/nixos-core/modules/stylix.nix
+  stylix.targets.fish.enable = false;
+
+  # Prompt; uses the terminal's 16 colors
   programs.starship = {
     enable = true;
     settings = {
