@@ -31,6 +31,11 @@ in
     };
 
     virtualisation.oci-containers.backend = "docker";
+    # Weekly image updates (updates.nix); the database is pinned
+    homelab.containerUpdates = [
+      "immich_server"
+      "immich_machine_learning"
+    ];
     virtualisation.oci-containers.containers =
       let
         common = {
@@ -65,7 +70,6 @@ in
 
         immich_server = common // {
           image = "ghcr.io/immich-app/immich-server:${cfg.version}";
-          pull = "always";
           environment = immichEnv;
           environmentFiles = [ config.sops.templates."immich.env".path ];
           ports = [ "127.0.0.1:2283:2283" ];
@@ -85,7 +89,6 @@ in
 
         immich_machine_learning = common // {
           image = "ghcr.io/immich-app/immich-machine-learning:${cfg.version}";
-          pull = "always";
           environment = immichEnv;
           environmentFiles = [ config.sops.templates."immich.env".path ];
           volumes = [ "${state}/model-cache:/cache" ];

@@ -20,12 +20,16 @@ in
     '';
 
     virtualisation.oci-containers.backend = "docker";
+    # Weekly image updates (updates.nix)
+    homelab.containerUpdates = [
+      "gluetun"
+      "qbittorrent"
+    ];
     virtualisation.oci-containers.containers = {
       # VPN tunnel; qBittorrent shares its network namespace, so it has no
       # route to the internet except through ProtonVPN
       gluetun = {
         image = "qmcgaw/gluetun:v3";
-        pull = "always";
         extraOptions = [
           "--cap-add=NET_ADMIN"
           "--device=/dev/net/tun:/dev/net/tun"
@@ -53,7 +57,6 @@ in
 
       qbittorrent = {
         image = "lscr.io/linuxserver/qbittorrent:latest";
-        pull = "always";
         dependsOn = [ "gluetun" ];
         extraOptions = [ "--network=container:gluetun" ];
         environment = {

@@ -6,16 +6,24 @@
 }:
 let
   docker = "${config.virtualisation.docker.package}/bin/docker";
-  # Containers that follow a moving tag (pull = "always"): Immich v3, gluetun
-  # v3, qBittorrent latest. Pinned images (the Immich database) are left alone.
-  tracked = lib.filterAttrs (_: c: c.pull == "always") config.virtualisation.oci-containers.containers;
+  tracked = lib.getAttrs config.homelab.containerUpdates config.virtualisation.oci-containers.containers;
 in
 {
+  # Containers that follow a moving tag (Immich v3, gluetun v3, qBittorrent
+  # latest) list themselves here. They start from the local image and are
+  # only pulled by this weekly job: pulling on every start made them fail
+  # at boot, before DNS works, and systemd then gave up on them
+  options.homelab.containerUpdates = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [ ];
+    description = "oci-containers to pull and restart weekly when their image changes.";
+  };
+
   # Native services (Jellyfin, Audiobookshelf, Calibre-Web, Komga, File
   # Browser) update with nixpkgs: `nx update` on a workstation, then
   # `nx on nazgul`. Containers update here instead: once a week, pull each
   # tracked image and restart only the containers whose image changed.
-  systemd.services.container-updates = lib.mkIf (tracked != { }) {
+  config.systemd.services.container-updates = lib.mkIf (tracked != { }) {
     description = "Pull newer container images and restart changed containers";
     after = [ "docker.service" ];
     requires = [ "docker.service" ];
@@ -39,7 +47,7 @@ in
     );
   };
 
-  systemd.timers.container-updates = lib.mkIf (tracked != { }) {
+  config.systemd.timers.container-updates = lib.mkIf (tracked != { }) {
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "Sun 04:00";
